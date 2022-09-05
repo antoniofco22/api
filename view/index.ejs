@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+   <title>FRONT API</title>
+   <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+        *{  
+            font-family: 'Roboto';
+            font-style: normal;
+            margin: 0;
+            padding: 0;
+        }
+        #cab{
+            width:100vw;
+            height:6.94vw;
+            background: #14BC39;
+            text-align: center;
+        }
+        p.title{
+            font-weight: 700;
+            font-size: 2.22vw;
+            line-height: 2.375rem;
+            padding-top:2.36vw;
+            color:white;
+        }
+        #art{
+            margin:0 2.375rem  0;
+        }
+        #cab-panel{
+            min-height:6.87vw;
+            border-bottom: 0.063rem solid #14BC39;
+        }
+        .panel-title{
+            padding-top: 5vw;
+            font-weight: 500;
+            font-size: 1.80vw;
+            line-height: 1.875rem;
+            margin-left: 0.75rem;
+        }
+        .panel-info{
+            font-weight: 400;
+            font-size: 1.125rem;
+            line-height: 1.313rem;
+            margin-left: 0.75rem;
+        }
+        #cadastro{
+            padding-top: 0.813rem;
+            margin-left:0.188rem;
+        }
+        #cadastro input{
+            width:31.25rem;
+            font-weight: 400;
+            font-size: 1.375rem;
+            line-height: 1.625rem;
+            border: 1px solid #14BC39;
+            border-radius: 5px;
+            padding: 0.75rem 0 0.75rem 0.75rem;
+        }
+        #cadastro button{
+            font-weight: 400;
+            font-size: 1.375rem;
+            line-height: 1.625rem;
+            background: #14BC39;
+            color:white;
+            border:0;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+            border-radius: 5px;
+            width: 270px;
+            height: 50px;
+        }
+        #cab-users{
+            border-bottom: 0.063rem solid #14BC39;
+        }
+        #content{
+            padding-top: 1vw;
+        }
+        table{
+            width:100%;
+        }
+        td{
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 21px;
+            text-align:center;
+            padding:0.813rem;
+        }
+        thead{
+            background: #14BC39;
+        }
+        thead td{
+            color:white;
+        }
+        tbody td{
+            color: #535151;
+        }
+        tbody tr:nth-child(n){
+            background: #BDE3C6;
+            text-align:center;
+        }
+        tbody tr:nth-child(2n){
+            background: #F8F8F8;
+            text-align:center;
+        }
+
+        input.edit {
+            width:80%;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 21px;
+            padding: 0.813rem;
+            background:transparent;
+            border:0
+        }
+        button.button-edit{
+            color:white;
+            background:#14bc39;
+            border:0;
+            width:100%;
+            height:100%;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 21px;
+            background: #14BC39;
+            color: white;
+            border: 0;
+            box-shadow: 0px 2px 2px rgb(0 0 0 / 25%);
+            border-radius: 5px;
+            padding: 0.813rem;
+        }
+   </style>
+</head>
+<body>
+    <section id="container">
+        <header id="cab">
+            <p class="title">FRONT API</p>
+        </header>
+        <article id="art">
+            <div id="cab-panel">
+                <p class="panel-title">FORMULÁRIO DE CADASTRO DE USUÁRIOS</p>
+                <p class="panel-info">Para inserir usuários na lista, preencha os dados abaixo.</p>
+            </div>
+            <div id="cadastro">
+                    <input type="text" name="nome" placeholder="Nome Completo" id="nome">
+                    <input type="email" name="email" placeholder="E-mail" id="email">
+                    <button onclick="poster();">Cadastrar</button>
+            </div>
+            <div id="users">
+                <div id="cab-users">
+                    <p class="panel-title">LISTA DE USUÁRIOS CADASTRADOS</p>
+                    <p class="panel-info">Abaixo, você pode ver os usuários registrados, podendo editá-los ou remové-los.</p>
+                </div>
+                <div id="content">
+                    <table>
+                        <thead>
+                            <td>
+                                #ID
+                            </td>
+                            <td>
+                                NOME
+                            </td>
+                            <td>
+                                E-MAIL
+                            </td>
+                            <td>
+                                EDITAR
+                            </td>
+                            <td>
+                                EXCLUIR
+                            </td>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </article>
+    </section>
+    <script>
+        async function postando(){
+            onome=document.querySelector('#nome').value;
+            oemail=document.querySelector('#email').value;
+            const requestOptions = {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer my-token',
+                    'My-Custom-Header': 'foobar'
+                },
+                body: JSON.stringify({ nome: onome,email: oemail })
+            };
+            const response = fetch('/usuarios',requestOptions);
+            json_response = await response;
+            return json_response;
+        }
+       
+
+        async function getData(){
+            const response = fetch('/usuarios');
+            json_response = await response;
+            return json_response.json();
+        }
+        
+
+        function get() {
+            getData().then(function(data){
+                table = document.querySelector('tbody');
+            
+                
+                data.forEach(function(item,index){
+                    row = table.insertRow();
+                    cell1 = row.insertCell();
+                    cell2 = row.insertCell();
+                    cell3 = row.insertCell();
+                    cell4 = row.insertCell();
+                    cell5 = row.insertCell();
+                    console.log(String(index).length);
+                    if(String(index).length==1){
+                        number = "000"+index;
+                    }else if(String(index).length==2){
+                        number = "00"+index;
+                    }else if(String(index).length==3){
+                        number = "0"+index;
+                    }else{
+                        number = index;
+                    }
+                    cell1.innerHTML = number;
+                    cell2.innerHTML = item.nome;
+                    cell3.innerHTML = item.email;
+                    cell4.innerHTML = "<img src='./img/edit.png' onclick='edit("+index+");'>";
+                    cell5.innerHTML = "<img src='./img/delete.png' onclick='Deletar("+index+");'>";
+                    
+                });
+                
+            
+            });
+
+            
+        }
+        get();
+        function poster(){
+            postando();
+            apagar();
+            get();
+        }
+        async function deletando(id){
+            const requestOptions = {
+                method: 'DELETE',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer my-token',
+                    'My-Custom-Header': 'foobar'
+                }
+            };
+            const response = fetch('/usuarios/'+id,requestOptions);
+            json_response = await response;
+            return json_response;
+        }
+
+        function Deletar(id) {
+            deletando(id);
+            apagar();
+            get();
+        }
+        async function putEnviar(id){
+            x=id+1;
+            nome_edit=document.querySelector('tbody tr:nth-child('+x+') td input').value;
+            email_edit=document.querySelectorAll('tbody tr:nth-child('+x+') td input')[1].value;
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer my-token',
+                    'My-Custom-Header': 'foobar'
+                },
+                body: JSON.stringify({ nome: nome_edit,email: email_edit })
+            };
+            const response = fetch('/usuarios/'+id,requestOptions);
+            json_response = await response;
+            return json_response;
+        }
+
+        function editar(id){
+            putEnviar(id);
+            apagar();
+            get();
+        }
+
+        function edit(id){
+            x=id+1;
+            tds = document.querySelectorAll('tbody tr:nth-child('+x+') td');
+            tds.forEach(function(item,index){
+                if(index==1){
+                    input = '<input type="text" value="'+item.innerHTML+'" name="nome-edit" class="edit">';
+                    item.innerHTML = input;
+                }
+                if(index==2){
+                    input = '<input type="text" value="'+item.innerHTML+'" name="email-edit" class="edit">';
+                    item.innerHTML = input;
+                }
+                if(index==3){
+                    input = '<button class="button-edit" onclick="editar('+id+')">EDITAR</button>';
+                    item.innerHTML = input;
+                }
+            });
+
+        }
+        function apagar(){
+            document.querySelector('tbody').innerHTML='';
+        }
+
+/*
+const element = document.querySelector('#put-request-set-headers .date-updated');
+const requestOptions = {
+    method: 'PUT',
+    headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer my-token',
+        'My-Custom-Header': 'foobar'
+    },
+    body: JSON.stringify({ nome: 'Fetch PUT Request Example',email: 'Fetch PUT Request Example' })
+};
+fetch('https://deafeninglikablechapter.antoniofranci11.repl.co/usuarios/1', requestOptions)
+    .then(response => response.json())
+    .then(data => element.innerHTML = data.updatedAt);
+
+
+const request = {
+    method: 'DELETE',
+    headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer my-token',
+        'My-Custom-Header': 'foobar'
+    }
+};
+fetch('https://deafeninglikablechapter.antoniofranci11.repl.co/usuarios/0', request)
+    .then(response => response.json())
+    .then(data => element.innerHTML = data.updatedAt);
+*/
+        </script>
+</body>
+</html>
